@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getDatabase, ref, push} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+import { getDatabase, ref, push, onValue} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
 const firebaseConfig = {
     databaseURL : "https://leads-tracker-app-49ace-default-rtdb.europe-west1.firebasedatabase.app/"
@@ -7,14 +7,19 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app)
+const referenceInDB = ref(database,"leads")
 
 let inputEl = document.getElementById("text-el")
 
 let ulEl = document.getElementById("ul-el")
 
+onValue(referenceInDB, function(snapshot){
+    console.log(snapshot.val())
+})
 
 let saveBtn = document.getElementById("save-btn")
 saveBtn.addEventListener("click" , function(){
+    push(referenceInDB, inputEl.value)
     inputEl.value = ""
 })
 
